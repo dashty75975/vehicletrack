@@ -10,7 +10,7 @@
       --text:#1f2328;
       --card:#ffffff;
       --muted:#e6e8eb;
-      --primary:#0d6efd;   /* used for accents and custom color */
+      --primary:#0d6efd;
     }
     [data-theme="dark"]{
       --bg:#0f1115;
@@ -21,11 +21,7 @@
     }
     *{box-sizing:border-box}
     body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif}
-    header{
-      position:sticky;top:0;z-index:10;
-      background:var(--card);border-bottom:1px solid var(--muted);
-      display:flex;align-items:center;gap:10px;justify-content:space-between;padding:10px 12px;font-weight:700
-    }
+    header{position:sticky;top:0;z-index:10;background:var(--card);border-bottom:1px solid var(--muted);display:flex;align-items:center;gap:10px;justify-content:space-between;padding:10px 12px;font-weight:700}
     .brand{display:flex;align-items:center;gap:8px}
     .brand .dot{width:10px;height:10px;border-radius:50%;background:var(--primary)}
     .controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
@@ -33,69 +29,36 @@
     .chip:hover{background:var(--bg)}
     .theme-control{display:flex;align-items:center;gap:6px;border:1px solid var(--muted);padding:6px 8px;border-radius:10px;background:var(--card)}
     .theme-control select, .theme-control input[type="color"]{border:none;background:transparent;color:var(--text)}
-    nav{
-      display:flex;justify-content:center;gap:8px;
-      background:var(--card);border-bottom:1px solid var(--muted);padding:8px
-    }
-    nav button{border:1px solid var(--muted);background:var(--card);color:var(--text);padding:8px 12px;border-radius:10px;cursor:pointer}
-    nav button:hover{background:var(--bg)}
-    #vehicleBar{
-      display:flex;justify-content:center;gap:10px;padding:8px;background:var(--card);border-bottom:1px solid var(--muted)
-    }
-    #vehicleBar button{
-      width:46px;height:46px;border-radius:50%;
-      display:flex;align-items:center;justify-content:center;
-      border:1px solid var(--muted);background:var(--card);cursor:pointer;font-size:22px
-    }
-    #vehicleBar button.active{outline:2px solid var(--primary)}
+    #vehicleBar{display:flex;justify-content:center;gap:10px;padding:8px;background:var(--card);border-bottom:1px solid var(--muted)}
+    #vehicleBar button{padding:8px 14px;border-radius:8px;border:1px solid var(--muted);background:var(--card);cursor:pointer;font-size:14px}
+    #vehicleBar button.active{background:var(--primary);color:#fff}
     #map{width:100%;height:calc(100vh - 210px)}
-    .panel{
-      max-width:520px;margin:18px auto;padding:18px;background:var(--card);
-      border:1px solid var(--muted);border-radius:14px
-    }
+    .panel{max-width:520px;margin:18px auto;padding:18px;background:var(--card);border:1px solid var(--muted);border-radius:14px}
     .panel h2{margin:0 0 10px}
     .row{display:flex;gap:10px}
     .row>div{flex:1}
-    input,select{
-      width:100%;padding:10px;border-radius:10px;border:1px solid var(--muted);
-      background:var(--bg);color:var(--text)
-    }
-    .btn{
-      width:100%;padding:12px;border:none;border-radius:10px;cursor:pointer;background:var(--primary);color:white;font-weight:700
-    }
+    input,select{width:100%;padding:10px;border-radius:10px;border:1px solid var(--muted);background:var(--bg);color:var(--text)}
+    .btn{width:100%;padding:12px;border:none;border-radius:10px;cursor:pointer;background:var(--primary);color:white;font-weight:700}
     .btn.secondary{background:var(--card);color:var(--text);border:1px solid var(--muted)}
     .btn.warn{background:#dc3545}
     table{width:100%;border-collapse:collapse;margin-top:8px}
     th,td{border:1px solid var(--muted);padding:8px;text-align:left}
     th{background:var(--bg)}
     .hidden{display:none}
-    #myLocationBtn{
-      position:absolute;top:220px;left:10px;z-index:5;background:var(--card);
-      border:1px solid var(--muted);padding:8px 10px;border-radius:10px;cursor:pointer
-    }
-    /* small legend bubble above markers (for buses) */
-    .marker-label{
-      background:var(--card);border:1px solid var(--muted);padding:2px 6px;border-radius:6px;
-      font-size:12px;font-weight:700;color:var(--text)
-    }
+    #myLocationBtn{position:absolute;top:220px;left:10px;z-index:5;background:var(--card);border:1px solid var(--muted);padding:8px 10px;border-radius:10px;cursor:pointer}
   </style>
 </head>
 <body data-theme="light">
   <header>
-    <div class="brand">
-      <span class="dot"></span>
-      <span>Vehicle Tracking</span>
-    </div>
-    <!-- THEME CONTROL ON HOMEPAGE -->
+    <div class="brand"><span class="dot"></span><span>Vehicle Tracking</span></div>
     <div class="controls">
       <div class="theme-control">
         <label for="themeMode">Theme:</label>
         <select id="themeMode" onchange="onThemeModeChange(this.value)">
           <option value="light" selected>Light</option>
           <option value="dark">Dark</option>
-          <option value="custom">Custom</option>
         </select>
-        <input id="themeColor" type="color" value="#0d6efd" title="Primary color" onchange="onThemeColor(this.value)" />
+        <input id="themeColor" type="color" value="#0d6efd" onchange="onThemeColor(this.value)" />
       </div>
       <button class="chip" onclick="showSection('mapSection')">Map</button>
       <button class="chip" onclick="showSection('registerSection')">Driver Register</button>
@@ -104,606 +67,132 @@
     </div>
   </header>
 
-  <!-- VEHICLE ICON FILTER BAR -->
   <div id="vehicleBar"></div>
+  <section id="mapSection"><div id="map"></div><button id="myLocationBtn" onclick="centerOnUser()">📍 My Location</button></section>
 
-  <!-- MAP -->
-  <section id="mapSection">
-    <div id="map"></div>
-    <button id="myLocationBtn" onclick="centerOnUser()">📍 My Location</button>
-  </section>
-
-  <!-- DRIVER REGISTRATION -->
   <section id="registerSection" class="hidden">
     <div class="panel">
       <h2>Driver Registration</h2>
-      <div class="row">
-        <div><input id="regName" placeholder="Full Name"></div>
-        <div><input id="regEmail" type="email" placeholder="Email"></div>
+      <div class="row"><div><input id="regName" placeholder="Full Name"></div><div><input id="regEmail" type="email" placeholder="Email"></div></div>
+      <div class="row"><div><input id="regPhone" placeholder="Phone Number"></div><div><input id="regLicense" placeholder="Driver License Number"></div></div>
+      <div class="row"><div><input id="regPlate" placeholder="Vehicle Plate"></div>
+        <div><select id="regType"><option value="Bus">🚌 Bus</option><option value="Taxi">🚖 Taxi</option><option value="Van">🚐 Van</option><option value="TukTuk">🛺 Tuk-Tuk</option></select></div>
       </div>
-      <div class="row">
-        <div><input id="regPhone" placeholder="Phone Number"></div>
-        <div><input id="regLicense" placeholder="Driver License Number"></div>
-      </div>
-      <div class="row">
-        <div><input id="regPlate" placeholder="Vehicle Plate"></div>
-        <div>
-          <select id="regType" onchange="toggleRegExtras(this.value)">
-            <option value="Bus">🚌 Bus</option>
-            <option value="Taxi">🚖 Taxi</option>
-            <option value="Van">🚐 Van</option>
-            <option value="TukTuk">🛺 Tuk-Tuk</option>
-          </select>
-        </div>
-      </div>
-      <div id="regBusExtras" class="row">
-        <div><input id="routeFrom" placeholder="Route From"></div>
-        <div><input id="routeTo" placeholder="Route To"></div>
-      </div>
-      <div id="regTaxiExtras" class="row hidden">
-        <div><input id="taxiNumber" placeholder="Taxi Number"></div>
-      </div>
+      <div class="row"><div><input id="routeFrom" placeholder="Route From"></div><div><input id="routeTo" placeholder="Route To"></div></div>
+      <div class="row"><div><input id="taxiNumber" placeholder="Taxi Number"></div></div>
       <input id="regPass" type="password" placeholder="Password">
       <button class="btn" onclick="registerDriver()">Register</button>
     </div>
   </section>
 
-  <!-- DRIVER LOGIN -->
-  <section id="driverLoginSection" class="hidden">
-    <div class="panel">
-      <h2>Driver Login</h2>
-      <input id="driverEmail" type="email" placeholder="Email">
-      <input id="driverPass" type="password" placeholder="Password">
-      <button class="btn" onclick="driverLogin()">Login</button>
-    </div>
-  </section>
+  <section id="driverLoginSection" class="hidden"><div class="panel"><h2>Driver Login</h2><input id="driverEmail" type="email" placeholder="Email"><input id="driverPass" type="password" placeholder="Password"><button class="btn" onclick="driverLogin()">Login</button></div></section>
 
-  <!-- DRIVER PANEL -->
-  <section id="driverPanelSection" class="hidden">
-    <div class="panel">
-      <h2>Driver Panel</h2>
-      <button class="btn" onclick="driverToggleOnline()">
-        Go <span id="driverStatusText">Online</span>
-      </button>
-      <h3>Edit Information</h3>
-      <div class="row">
-        <div><input id="editName" placeholder="Full Name"></div>
-        <div><input id="editPhone" placeholder="Phone Number"></div>
-      </div>
-      <div class="row">
-        <div><input id="editPlate" placeholder="Vehicle Plate"></div>
-        <div><input id="editTaxiNumber" placeholder="Taxi Number (if taxi)"></div>
-      </div>
-      <div class="row">
-        <div><input id="editRouteFrom" placeholder="Route From (if bus)"></div>
-        <div><input id="editRouteTo" placeholder="Route To (if bus)"></div>
-      </div>
-      <button class="btn" onclick="driverSaveInfo()">Save</button>
-      <button class="btn secondary" onclick="logoutToMap()">Logout</button>
-    </div>
-  </section>
+  <section id="driverPanelSection" class="hidden"><div class="panel"><h2>Driver Panel</h2><button class="btn" onclick="driverToggleOnline()">Go <span id="driverStatusText">Online</span></button><button class="btn secondary" onclick="logoutToMap()">Logout</button></div></section>
 
-  <!-- ADMIN LOGIN -->
-  <section id="adminLoginSection" class="hidden">
-    <div class="panel">
-      <h2>Admin Login</h2>
-      <input id="adminEmail" type="email" placeholder="Email">
-      <input id="adminPass" type="password" placeholder="Password">
-      <button class="btn" onclick="adminLogin()">Login</button>
-    </div>
-  </section>
+  <section id="adminLoginSection" class="hidden"><div class="panel"><h2>Admin Login</h2><input id="adminEmail" type="email" placeholder="Email"><input id="adminPass" type="password" placeholder="Password"><button class="btn" onclick="adminLogin()">Login</button></div></section>
 
-  <!-- ADMIN PANEL -->
-  <section id="adminPanelSection" class="hidden">
-    <div class="panel">
-      <h2>Admin Dashboard</h2>
-      <input id="searchDriver" placeholder="Search driver..." oninput="renderDrivers()" />
-      <h3>Drivers</h3>
-      <table id="driversTable">
-        <thead>
-          <tr><th>Name</th><th>Type</th><th>Plate/Taxi#</th><th>Status</th><th>Online</th><th>Actions</th></tr>
-        </thead>
-        <tbody></tbody>
-      </table>
+  <section id="adminPanelSection" class="hidden"><div class="panel"><h2>Admin Dashboard</h2><table id="driversTable"><thead><tr><th>Name</th><th>Type</th><th>Status</th><th>Online</th></tr></thead><tbody></tbody></table><button class="btn secondary" onclick="logoutToMap()">Logout</button></div></section>
 
-      <h3 style="margin-top:16px">Vehicle Types & Icons</h3>
-      <div class="row">
-        <div><input id="vehicleType" placeholder="Vehicle Type (e.g. Bike)"></div>
-        <div><input id="vehicleIcon" placeholder="Icon (emoji or https://icon.png)"></div>
-      </div>
-      <button class="btn" onclick="addVehicleType()">Add Vehicle Type</button>
-      <table id="vehiclesTable" style="margin-top:10px">
-        <thead><tr><th>Type</th><th>Icon</th><th>Actions</th></tr></thead>
-        <tbody></tbody>
-      </table>
-      <button class="btn secondary" style="margin-top:12px" onclick="logoutToMap()">Logout</button>
-    </div>
-  </section>
-
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    /*********************
-     * SIMPLE FRONTEND STORE (in-memory demo; replace with your DB later)
-     *********************/
-    let vehicles = [
-      { type:"Bus",   icon:"🚌", alwaysVisible:true },
-      { type:"Taxi",  icon:"🚖", alwaysVisible:false },
-      { type:"Van",   icon:"🚐", alwaysVisible:false },
-      { type:"TukTuk",icon:"🛺", alwaysVisible:false },
-    ];
+    const supabase = window.supabase.createClient(
+      "https://mrjukodibztebnsytepu.supabase.co",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1yanVrb2RpYnp0ZWJuc3l0ZXB1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzMjEzNzgsImV4cCI6MjA3MTg5NzM3OH0.ljNARMpJbPRVcfPV2QV2NnFIblt25vJ_V3k7g-RJ6u4"
+    );
 
-    let drivers = []; // {id,name,email,pass,phone,license,plate,type,taxiNumber,routeFrom,routeTo,status,online,lat,lng}
-    let currentDriverId = null; // logged-in driver
-    let map, meMarker=null, typeVisibility = { Bus:true, Taxi:false, Van:false, TukTuk:false };
-    const markersByDriverId = new Map(); // driverId -> marker
+    let map, meMarker=null, currentDriver=null;
+    const markersByDriverId = new Map();
+    let filterType = "All";
 
-    // === THEME (homepage) ===
-    const themeModeEl = document.getElementById('themeMode');
-    const themeColorEl = document.getElementById('themeColor');
-    function onThemeModeChange(mode){
-      document.body.setAttribute('data-theme', mode==='dark'?'dark':'light');
-    }
-    function onThemeColor(hex){
-      document.documentElement.style.setProperty('--primary', hex);
-    }
+    function onThemeModeChange(mode){document.body.setAttribute('data-theme', mode==='dark'?'dark':'light');}
+    function onThemeColor(hex){document.documentElement.style.setProperty('--primary', hex);}
+    function showSection(id){document.querySelectorAll('section').forEach(s=>s.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');}
+    function logoutToMap(){currentDriver=null;showSection('mapSection');}
 
-    // === SECTION SWITCH ===
-    function showSection(id){
-      document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
-      document.getElementById(id).classList.remove('hidden');
-    }
-    function logoutToMap(){ currentDriverId = null; showSection('mapSection'); }
-
-    // === VEHICLE BAR ===
     function renderVehicleBar(){
-      const bar = document.getElementById('vehicleBar');
-      bar.innerHTML = '';
-      vehicles.forEach(v=>{
-        const btn = document.createElement('button');
-        btn.innerHTML = isUrl(v.icon) ? '🖼️' : v.icon;
-        if(typeVisibility[v.type]) btn.classList.add('active');
-        btn.title = v.type;
-        btn.onclick = ()=>{
-          // Buses always visible per requirement
-          if(v.type==='Bus'){ typeVisibility.Bus=true; }
-          else typeVisibility[v.type] = !typeVisibility[v.type];
-          renderVehicleBar();
-          refreshMarkersVisibility();
-        };
+      const bar=document.getElementById('vehicleBar');
+      const types=["All","Taxi","Bus","Van","TukTuk"];
+      bar.innerHTML='';
+      types.forEach(t=>{
+        const btn=document.createElement('button');
+        btn.textContent=t;
+        if(t===filterType)btn.classList.add('active');
+        btn.onclick=()=>{filterType=t;renderVehicleBar();fetchDrivers();};
         bar.appendChild(btn);
       });
     }
-    function isUrl(x){ return /^https?:\/\//i.test(x); }
 
-    // === MAP ===
-    function initMap(){
-      map = new google.maps.Map(document.getElementById('map'), { center:{lat:36.1911,lng:44.0090}, zoom:13, mapId: undefined });
-      centerOnUser(true);
-      renderVehicleBar();
-      renderVehiclesTable();
-      renderDrivers();
-    }
-    function centerOnUser(initial=false){
-      if(navigator.geolocation){
-        navigator.geolocation.getCurrentPosition(pos=>{
-          const p = {lat:pos.coords.latitude, lng:pos.coords.longitude};
-          map.setCenter(p);
-          // blue dot (my location)
-          if(!meMarker){
-            meMarker = new google.maps.Marker({
-              position:p, map,
-              icon:'https://maps.google.com/mapfiles/ms/icons/blue-dot.png',
-              title:'You are here'
-            });
-          } else {
-            meMarker.setPosition(p);
-          }
-          if(initial) map.setZoom(14);
-        }, err=>{
-          console.log('Geolocation error', err);
-        });
-      }
-    }
+    function initMap(){map=new google.maps.Map(document.getElementById('map'),{center:{lat:36.1911,lng:44.0090},zoom:13});centerOnUser(true);fetchDrivers();subscribeRealtime();}
 
-    // create/update marker for a driver
-    function upsertDriverMarker(d){
-      // Only show if approved; AND type visibility (Bus: always visible)
-      if(d.status!=='Approved') { removeDriverMarker(d.id); return; }
-      if(d.type!=='Bus' && !typeVisibility[d.type]) { removeDriverMarker(d.id); return; }
-      if(d.type==='Bus' && !typeVisibility['Bus']) { typeVisibility['Bus']=true; } // buses always visible
+    function centerOnUser(initial=false){if(navigator.geolocation){navigator.geolocation.getCurrentPosition(pos=>{const p={lat:pos.coords.latitude,lng:pos.coords.longitude};map.setCenter(p);if(!meMarker){meMarker=new google.maps.Marker({position:p,map,icon:'https://maps.google.com/mapfiles/ms/icons/blue-dot.png'});}else{meMarker.setPosition(p);}if(initial)map.setZoom(14);});}}
 
-      const pos = d.lat && d.lng ? {lat:d.lat,lng:d.lng} : map.getCenter();
-      const icon = getMarkerIconForType(d.type);
-      const label = (d.type==='Bus' && d.routeFrom && d.routeTo) ? {text:`${d.routeFrom}→${d.routeTo}`, color:'#000', fontSize:'12px', fontWeight:'700'} : undefined;
+    async function fetchDrivers(){let { data, error } = await supabase.from('drivers').select('*');if(error){console.error(error);return;}if(filterType!=="All"){data=data.filter(d=>d.type===filterType);}renderDrivers(data);renderMarkers(data);}
 
-      const existing = markersByDriverId.get(d.id);
-      if(existing){
-        existing.setPosition(pos);
-        existing.setLabel(label);
-        existing.setIcon(icon);
-        existing.setMap(d.online ? map : null);
-        return;
-      }
-      const m = new google.maps.Marker({
-        position: pos, map: d.online ? map : null, icon, label,
-        title: `${d.type} • ${d.name}`
+    function renderDrivers(data){const tbody=document.querySelector('#driversTable tbody');tbody.innerHTML='';data.forEach(d=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${d.name}</td><td>${d.type}</td><td>${d.status}</td><td>${d.online?'Online':'Offline'}</td>`;tbody.appendChild(tr);});}
+
+    function renderMarkers(drivers){
+      markersByDriverId.forEach((marker,id)=>{
+        if(!drivers.find(d=>d.id===id)){
+          marker.setMap(null);
+          markersByDriverId.delete(id);
+        }
       });
-      const infowin = new google.maps.InfoWindow({
-        content: `
-          <div class="marker-label">
-            <div><strong>${d.type}</strong> • ${d.plate || d.taxiNumber || ''}</div>
-            <div>${d.phone ? '📞 '+d.phone : ''}</div>
-            ${d.type==='Bus' && d.routeFrom && d.routeTo ? `<div>🧭 ${d.routeFrom} → ${d.routeTo}</div>` : ''}
-          </div>`
+      drivers.forEach(d=>{
+        if(!d.lat||!d.lng)return;
+        let marker=markersByDriverId.get(d.id);
+        if(!marker){
+          marker=new google.maps.Marker({map:null});
+          markersByDriverId.set(d.id,marker);
+          const infowin=new google.maps.InfoWindow();
+          marker.addListener('click',()=>{
+            infowin.setContent(`
+              <div style="font-size:14px">
+                <b>${d.type}</b> - ${d.name}<br>
+                📞 ${d.phone||''}<br>
+                🚘 Plate: ${d.plate||''} ${d.taxi_number||''}<br>
+                ${d.route_from&&d.route_to?`🧭 ${d.route_from} → ${d.route_to}`:''}
+              </div>`);
+            infowin.open({anchor:marker,map});
+          });
+        }
+        marker.setPosition({lat:d.lat,lng:d.lng});
+        marker.setTitle(`${d.type} - ${d.name}`);
+        marker.setIcon(getMarkerIconForType(d.type));
+        marker.setMap(d.online?map:null);
       });
-      m.addListener('click', ()=> infowin.open({anchor:m,map}));
-      markersByDriverId.set(d.id, m);
     }
-    function removeDriverMarker(id){
-      const m = markersByDriverId.get(id);
-      if(m){ m.setMap(null); markersByDriverId.delete(id); }
-    }
-    function refreshMarkersVisibility(){
-      drivers.forEach(d=> upsertDriverMarker(d));
-    }
+
     function getMarkerIconForType(type){
-      // emoji icon to Google marker: use default pins colored per type
-      const urls = {
-        Bus:'https://maps.google.com/mapfiles/ms/icons/green-dot.png',
-        Taxi:'https://maps.google.com/mapfiles/ms/icons/yellow-dot.png',
-        Van:'https://maps.google.com/mapfiles/ms/icons/purple-dot.png',
-        TukTuk:'https://maps.google.com/mapfiles/ms/icons/orange-dot.png'
-      };
-      return {url: urls[type] || 'https://maps.google.com/mapfiles/ms/icons/red-dot.png'};
+      const urls={Bus:'https://maps.google.com/mapfiles/ms/icons/green-dot.png',Taxi:'https://maps.google.com/mapfiles/ms/icons/yellow-dot.png',Van:'https://maps.google.com/mapfiles/ms/icons/purple-dot.png',TukTuk:'https://maps.google.com/mapfiles/ms/icons/orange-dot.png'};
+      return {url:urls[type]||'https://maps.google.com/mapfiles/ms/icons/red-dot.png'};
     }
-
-    // === REGISTRATION ===
-    function toggleRegExtras(t){
-      document.getElementById('regBusExtras').classList.toggle('hidden', t!=='Bus');
-      document.getElementById('regTaxiExtras').classList.toggle('hidden', t!=='Taxi');
-    }
-    const ADMIN_EMAIL = 'euzardi@gmail.com';
-    const SCRIPT_WEB_APP_URL = 'REPLACE_WITH_YOUR_DEPLOYED_APPS_SCRIPT_WEB_APP_URL'; // <-- set this when ready
 
     async function registerDriver(){
-      const d = {
-        id: 'd_'+Date.now(),
-        name: val('regName'), email: val('regEmail'), pass: val('regPass'),
-        phone: val('regPhone'), license: val('regLicense'), plate: val('regPlate'),
-        type: val('regType'), taxiNumber: val('taxiNumber'),
-        routeFrom: val('routeFrom'), routeTo: val('routeTo'),
-        status: 'Approved', // default; Taxi will override to Pending
-        online: false,
-        lat: null, lng: null
-      };
-      if(!d.name || !d.email || !d.pass || !d.type){ alert('Please complete required fields.'); return; }
-
-      // Only TAXI requires approval
-      if(d.type==='Taxi'){ d.status='Pending'; }
-
-      // Add to "DB"
-      drivers.push(d);
-      renderDrivers();
-
-      // Emails
-      try{
-        await sendWelcomeEmail(d.email, d.name);
-        if(d.type==='Taxi'){ await sendApprovalRequestToAdmin(ADMIN_EMAIL, d); }
-      }catch(e){ console.warn('Email error (demo)', e); }
-
-      alert(d.type==='Taxi'
-        ? 'Registered! Taxi is pending admin approval. A welcome email was sent.'
-        : 'Registered! You are approved and visible when online.');
-
-      // Auto-show on map only if NOT Taxi (bus/van/tuktuk)
-      if(d.type!=='Taxi'){ d.online = true; upsertDriverMarker(d); }
-
-      // Reset + go map
-      resetRegisterForm();
-      showSection('mapSection');
-    }
-    function resetRegisterForm(){
-      ['regName','regEmail','regPhone','regLicense','regPlate','regPass','routeFrom','routeTo','taxiNumber'].forEach(id=>setVal(id,''));
-      setVal('regType','Bus'); toggleRegExtras('Bus');
+      const d={name:val('regName'),email:val('regEmail'),pass:val('regPass'),phone:val('regPhone'),license:val('regLicense'),plate:val('regPlate'),type:val('regType'),taxi_number:val('taxiNumber'),route_from:val('routeFrom'),route_to:val('routeTo'),status:(val('regType')==='Taxi'?'Pending':'Approved'),online:false};
+      if(navigator.geolocation){navigator.geolocation.getCurrentPosition(pos=>{d.lat=pos.coords.latitude;d.lng=pos.coords.longitude;supabase.from('drivers').insert([d]);});}else{await supabase.from('drivers').insert([d]);}
+      alert('Registered!');fetchDrivers();showSection('mapSection');
     }
 
-    // === DRIVER LOGIN & PANEL ===
-    function driverLogin(){
-      const email = val('driverEmail'), pass = val('driverPass');
-      const d = drivers.find(x=> x.email===email && x.pass===pass);
-      if(!d){ alert('Invalid credentials'); return; }
-      if(d.type==='Taxi' && d.status!=='Approved'){ alert('Taxi pending approval by admin.'); return; }
-      currentDriverId = d.id;
-      // Fill edit fields
-      setVal('editName', d.name);
-      setVal('editPhone', d.phone || '');
-      setVal('editPlate', d.plate || '');
-      setVal('editTaxiNumber', d.taxiNumber || '');
-      setVal('editRouteFrom', d.routeFrom || '');
-      setVal('editRouteTo', d.routeTo || '');
-      document.getElementById('driverStatusText').innerText = d.online ? 'Offline' : 'Online';
-      showSection('driverPanelSection');
-    }
-    function driverToggleOnline(){
-      const d = getCurrentDriver(); if(!d) return;
-      d.online = !d.online;
-      document.getElementById('driverStatusText').innerText = d.online ? 'Offline' : 'Online';
-      // update live location if going online
-      if(d.online){
-        navigator.geolocation && navigator.geolocation.getCurrentPosition(pos=>{
-          d.lat = pos.coords.latitude; d.lng = pos.coords.longitude;
-          upsertDriverMarker(d);
-        }, ()=> upsertDriverMarker(d));
-      } else {
-        upsertDriverMarker(d); // will hide by setting map null
-      }
-      renderDrivers();
-    }
-    function driverSaveInfo(){
-      const d = getCurrentDriver(); if(!d) return;
-      d.name = val('editName'); d.phone = val('editPhone');
-      d.plate = val('editPlate'); d.taxiNumber = val('editTaxiNumber');
-      d.routeFrom = val('editRouteFrom'); d.routeTo = val('editRouteTo');
-      upsertDriverMarker(d);
-      renderDrivers();
-      alert('Saved.');
-    }
-    function getCurrentDriver(){ return drivers.find(x=>x.id===currentDriverId); }
+    async function driverLogin(){const email=val('driverEmail'),pass=val('driverPass');let { data,error }=await supabase.from('drivers').select('*').eq('email',email).eq('pass',pass).maybeSingle();if(error||!data){alert('Invalid');return;}if(data.type==='Taxi'&&data.status!=='Approved'){alert('Taxi pending approval');return;}currentDriver=data;document.getElementById('driverStatusText').innerText=data.online?'Offline':'Online';showSection('driverPanelSection');}
 
-    // === ADMIN LOGIN & PANEL ===
-    function adminLogin(){
-      const e = val('adminEmail'), p = val('adminPass');
-      if(e==='euzardi@gmail.com' && p==='Sarchnar1'){
-        showSection('adminPanelSection');
-        renderDrivers();
-        renderVehiclesTable();
-      } else alert('Invalid admin credentials');
-    }
+    async function driverToggleOnline(){if(!currentDriver)return;currentDriver.online=!currentDriver.online;if(navigator.geolocation){navigator.geolocation.getCurrentPosition(pos=>{currentDriver.lat=pos.coords.latitude;currentDriver.lng=pos.coords.longitude;supabase.from('drivers').update({online:currentDriver.online,lat:currentDriver.lat,lng:currentDriver.lng}).eq('id',currentDriver.id);});}else{await supabase.from('drivers').update({online:currentDriver.online}).eq('id',currentDriver.id);}document.getElementById('driverStatusText').innerText=currentDriver.online?'Offline':'Online';fetchDrivers();}
 
-    // Admin driver table
-    function renderDrivers(){
-      const tbody = document.querySelector('#driversTable tbody');
-      const q = (document.getElementById('searchDriver')?.value || '').toLowerCase();
-      tbody.innerHTML = '';
-      drivers
-        .filter(d=>{
-          const hay = `${d.name} ${d.email} ${d.type} ${d.plate} ${d.taxiNumber}`.toLowerCase();
-          return hay.includes(q);
+    function adminLogin(){if(val('adminEmail')==='admin@example.com'&&val('adminPass')==='password'){showSection('adminPanelSection');fetchDrivers();}else alert('Invalid admin');}
+
+    function val(id){return document.getElementById(id).value.trim();}
+
+    function subscribeRealtime(){
+      supabase.channel('drivers-changes')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'drivers' }, payload => {
+          console.log('Realtime update:', payload);
+          fetchDrivers();
         })
-        .forEach(d=>{
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td>${d.name}</td>
-            <td>${d.type}</td>
-            <td>${d.type==='Taxi' ? (d.taxiNumber||'') : (d.plate||'')}</td>
-            <td>${d.status}</td>
-            <td>${d.online?'Online':'Offline'}</td>
-            <td>
-              ${d.status!=='Approved' ? `<button class="chip" onclick="adminApprove('${d.id}')">Approve</button>` : ''}
-              <button class="chip" onclick="adminEdit('${d.id}')">Edit</button>
-              <button class="chip" onclick="adminForce('${d.id}')">${d.online?'Force Offline':'Force Online'}</button>
-              <button class="chip" onclick="adminDelete('${d.id}')">Delete</button>
-            </td>`;
-          tbody.appendChild(tr);
-        });
-      refreshMarkersVisibility();
-    }
-    function adminApprove(id){
-      const d = drivers.find(x=>x.id===id); if(!d) return;
-      d.status='Approved';
-      // Only when approved, add to map (Taxi rule)
-      d.online = true;
-      navigator.geolocation && navigator.geolocation.getCurrentPosition(pos=>{
-        d.lat=pos.coords.latitude; d.lng=pos.coords.longitude; upsertDriverMarker(d);
-      }, ()=> upsertDriverMarker(d));
-      renderDrivers();
-      // email approval to driver
-      sendApprovalEmail(d.email, d.name).catch(()=>{});
-    }
-    function adminEdit(id){
-      const d = drivers.find(x=>x.id===id); if(!d) return;
-      const name = prompt('Name:', d.name) ?? d.name;
-      const phone = prompt('Phone:', d.phone||'') ?? d.phone;
-      const plate = prompt('Plate:', d.plate||'') ?? d.plate;
-      const taxi = prompt('Taxi Number (if taxi):', d.taxiNumber||'') ?? d.taxiNumber;
-      const rf = prompt('Route From (if bus):', d.routeFrom||'') ?? d.routeFrom;
-      const rt = prompt('Route To (if bus):', d.routeTo||'') ?? d.routeTo;
-      Object.assign(d,{name,phone,plate,taxiNumber:taxi,routeFrom:rf,routeTo:rt});
-      upsertDriverMarker(d);
-      renderDrivers();
-    }
-    function adminForce(id){
-      const d = drivers.find(x=>x.id===id); if(!d) return;
-      d.online = !d.online;
-      upsertDriverMarker(d);
-      renderDrivers();
-    }
-    function adminDelete(id){
-      const idx = drivers.findIndex(x=>x.id===id); if(idx<0) return;
-      removeDriverMarker(id);
-      drivers.splice(idx,1);
-      renderDrivers();
+        .subscribe();
     }
 
-    // Admin vehicle types
-    function renderVehiclesTable(){
-      const tb = document.querySelector('#vehiclesTable tbody');
-      tb.innerHTML='';
-      vehicles.forEach((v,i)=>{
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${v.type}</td>
-          <td>${isUrl(v.icon) ? `<img src="${v.icon}" alt="" style="height:20px">` : v.icon}</td>
-          <td>
-            <button class="chip" onclick="editVehicleType(${i})">Edit</button>
-            <button class="chip" onclick="deleteVehicleType(${i})">Delete</button>
-          </td>`;
-        tb.appendChild(tr);
-      });
-      renderVehicleBar();
-    }
-    function addVehicleType(){
-      const type = val('vehicleType'), icon = val('vehicleIcon');
-      if(!type || !icon){ alert('Please fill type and icon'); return; }
-      if(vehicles.some(v=>v.type===type)){ alert('Type already exists'); return; }
-      vehicles.push({type,icon,alwaysVisible:false});
-      setVal('vehicleType',''); setVal('vehicleIcon','');
-      typeVisibility[type]=false;
-      renderVehiclesTable();
-    }
-    function editVehicleType(i){
-      const v = vehicles[i];
-      const t = prompt('Vehicle type:', v.type) ?? v.type;
-      const ic = prompt('Icon (emoji or URL):', v.icon) ?? v.icon;
-      vehicles[i] = {...v, type:t, icon:ic};
-      // migrate visibility key if type changed
-      const oldKey = v.type; if(oldKey!==t){ typeVisibility[t]=typeVisibility[oldKey]; delete typeVisibility[oldKey]; }
-      renderVehiclesTable();
-    }
-    function deleteVehicleType(i){
-      const v = vehicles[i];
-      vehicles.splice(i,1);
-      delete typeVisibility[v.type];
-      renderVehiclesTable();
-    }
-
-    // === EMAILS via APPS SCRIPT WEB APP ===
-    async function sendWelcomeEmail(to, name){
-      if(!SCRIPT_WEB_APP_URL.startsWith('http')) { console.log('Welcome email (demo):', to, name); return; }
-      await fetch(SCRIPT_WEB_APP_URL, {
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({action:'welcome', to, name})
-      });
-    }
-    async function sendApprovalRequestToAdmin(adminTo, driver){
-      if(!SCRIPT_WEB_APP_URL.startsWith('http')) { console.log('Approval request (demo):', adminTo, driver); return; }
-      await fetch(SCRIPT_WEB_APP_URL, {
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({action:'notify_admin', adminTo, driver})
-      });
-    }
-    async function sendApprovalEmail(to, name){
-      if(!SCRIPT_WEB_APP_URL.startsWith('http')) { console.log('Approval email (demo):', to, name); return; }
-      await fetch(SCRIPT_WEB_APP_URL, {
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({action:'approved', to, name})
-      });
-    }
-
-    // === UTIL ===
-    function val(id){ return document.getElementById(id).value.trim(); }
-    function setVal(id,v){ document.getElementById(id).value = v; }
-
-    // Start
-    document.addEventListener('DOMContentLoaded', ()=> {
-      renderVehicleBar();
-    });
+    document.addEventListener('DOMContentLoaded',()=>{renderVehicleBar();});
   </script>
 
-  <!-- GOOGLE MAPS (uses your provided API key) -->
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDplHGkSwtUjhWC-Zy6DNfesRH4IdWAKDM&callback=initMap"></script>
-
-  <!-- ================= APPS SCRIPT BACKEND (COPY INTO Apps Script) =================
-       Create a new Apps Script project, paste the code below into Code.gs,
-       Deploy > New Deployment > Web app (Anyone with the link). Then copy the URL
-       into SCRIPT_WEB_APP_URL at the top of this HTML.
-  -->
-  <script type="text/plain" id="code.gs">
-/**
- * Google Apps Script backend for emails.
- * Deploy as Web App (doGet/doPost). Uses MailApp to send emails.
- */
-
-function doPost(e){
-  try{
-    var data = JSON.parse(e.postData.contents);
-    var action = data.action;
-    if(action === 'welcome'){
-      sendWelcome_(data.to, data.name);
-      return ContentService.createTextOutput(JSON.stringify({ok:true}));
-    }
-    if(action === 'notify_admin'){
-      notifyAdmin_(data.adminTo, data.driver);
-      return ContentService.createTextOutput(JSON.stringify({ok:true}));
-    }
-    if(action === 'approved'){
-      sendApproved_(data.to, data.name);
-      return ContentService.createTextOutput(JSON.stringify({ok:true}));
-    }
-    return ContentService.createTextOutput(JSON.stringify({ok:false, error:'Unknown action'}));
-  }catch(err){
-    return ContentService.createTextOutput(JSON.stringify({ok:false, error:String(err)}));
-  }
-}
-
-function sendWelcome_(to, name){
-  var subject = "Welcome to Vehicle Tracking";
-  var body = "Hi " + (name||"Driver") + ",\\n\\nWelcome! Your registration has been received.\\n\\n";
-  body += "If you registered as a Taxi driver, an admin will review and approve you shortly.\\n";
-  body += "\\nRegards,\\nVehicle Tracking Team";
-  MailApp.sendEmail({to: to, subject: subject, htmlBody: body.replace(/\\n/g,"<br>")});
-}
-
-function notifyAdmin_(adminTo, driver){
-  var subject = "Taxi Approval Needed: " + (driver.name||"");
-  var body = "A new Taxi driver needs approval:\\n\\n" +
-             "Name: " + (driver.name||"") + "\\n" +
-             "Email: " + (driver.email||"") + "\\n" +
-             "Phone: " + (driver.phone||"") + "\\n" +
-             "Taxi Number: " + (driver.taxiNumber||"") + "\\n" +
-             "Plate: " + (driver.plate||"") + "\\n";
-  MailApp.sendEmail({to: adminTo, subject: subject, htmlBody: body.replace(/\\n/g,"<br>")});
-}
-
-function sendApproved_(to, name){
-  var subject = "Your Taxi Registration is Approved";
-  var body = "Hi " + (name||"Driver") + ",\\n\\nGood news! Your Taxi registration has been approved.\\n";
-  body += "You can now go Online in the Driver Panel to appear on the map.\\n\\nRegards,\\nVehicle Tracking Team";
-  MailApp.sendEmail({to: to, subject: subject, htmlBody: body.replace(/\\n/g,"<br>")});
-}
-  </script> src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-  const supabase = window.supabase.createClient(
-    "https://mrjukodibztebnsytepu.supabase.co",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1yanVrb2RpYnp0ZWJuc3l0ZXB1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzMjEzNzgsImV4cCI6MjA3MTg5NzM3OH0.ljNARMpJbPRVcfPV2QV2NnFIblt25vJ_V3k7g-RJ6u4"
-  );
-
-  async function fetchDrivers(){
-    let { data, error } = await supabase.from('drivers').select('*');
-    if(error){ console.error(error); return; }
-    drivers = data;
-    drivers.forEach(d => upsertDriverMarker(d));
-  }
-
-  async function registerDriver(){
-    const d = {
-      name: val('regName'),
-      email: val('regEmail'),
-      pass: val('regPass'),
-      phone: val('regPhone'),
-      license: val('regLicense'),
-      plate: val('regPlate'),
-      type: val('regType'),
-      taxi_number: val('taxiNumber'),
-      route_from: val('routeFrom'),
-      route_to: val('routeTo'),
-      status: (val('regType')==='Taxi' ? 'Pending' : 'Approved'),
-      online: false
-    };
-    const { error } = await supabase.from('drivers').insert([d]);
-    if(error){ alert(error.message); return; }
-    alert("Registered successfully!");
-    fetchDrivers();
-    showSection('mapSection');
-  }
-
-  document.addEventListener('DOMContentLoaded', ()=> {
-    renderVehicleBar();
-    fetchDrivers();
-  });
-</script>
-
 </body>
 </html>
