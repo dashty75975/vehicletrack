@@ -663,6 +663,47 @@ function sendApproved_(to, name){
   body += "You can now go Online in the Driver Panel to appear on the map.\\n\\nRegards,\\nVehicle Tracking Team";
   MailApp.sendEmail({to: to, subject: subject, htmlBody: body.replace(/\\n/g,"<br>")});
 }
-  </script>
+  </script> src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const supabase = window.supabase.createClient(
+    "https://mrjukodibztebnsytepu.supabase.co",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1yanVrb2RpYnp0ZWJuc3l0ZXB1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzMjEzNzgsImV4cCI6MjA3MTg5NzM3OH0.ljNARMpJbPRVcfPV2QV2NnFIblt25vJ_V3k7g-RJ6u4"
+  );
+
+  async function fetchDrivers(){
+    let { data, error } = await supabase.from('drivers').select('*');
+    if(error){ console.error(error); return; }
+    drivers = data;
+    drivers.forEach(d => upsertDriverMarker(d));
+  }
+
+  async function registerDriver(){
+    const d = {
+      name: val('regName'),
+      email: val('regEmail'),
+      pass: val('regPass'),
+      phone: val('regPhone'),
+      license: val('regLicense'),
+      plate: val('regPlate'),
+      type: val('regType'),
+      taxi_number: val('taxiNumber'),
+      route_from: val('routeFrom'),
+      route_to: val('routeTo'),
+      status: (val('regType')==='Taxi' ? 'Pending' : 'Approved'),
+      online: false
+    };
+    const { error } = await supabase.from('drivers').insert([d]);
+    if(error){ alert(error.message); return; }
+    alert("Registered successfully!");
+    fetchDrivers();
+    showSection('mapSection');
+  }
+
+  document.addEventListener('DOMContentLoaded', ()=> {
+    renderVehicleBar();
+    fetchDrivers();
+  });
+</script>
+
 </body>
 </html>
